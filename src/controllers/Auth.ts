@@ -1,9 +1,12 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express"
 
 module.exports = {
-  
   async register(req: Request, res: Response) {
-    // Logic for user registration
-    res.status(201).json({ message: "User registered successfully" });
+    try {
+
+
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" })
+    }
   },
 }
