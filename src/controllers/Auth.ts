@@ -11,7 +11,7 @@ module.exports = {
     try {
       // Validation des données d'entrée (Zod)
       const validatedData = registerSchema.safeParse(req.body)
-      if (!validatedData.success) return res.status(400).json({ success: false, errors: validatedData.error.errors }) 
+      if (!validatedData.success) return res.status(400).json({ success: false, error: "Données invalides" }) 
 
      // Destructuration des données validées
       const { name, email, password, image } = validatedData.data
@@ -30,6 +30,9 @@ module.exports = {
         password: hashedPassword, 
         image,
       })
+
+      // Returner une réponse de succès
+      return res.status(201).json({ success: true, message: "User created successfully", user: newUser })
 
     } catch (error) {
       res.status(500).json({ message: "Internal server error" })
