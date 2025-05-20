@@ -6,6 +6,10 @@ const apiRoutes = require("./routes/api")
 const app = express()
 const port = 3000
 
+// Middleware pour parser le JSON
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 // Définir les routes
 app.use("/", webRoutes);
 app.use("/api", apiRoutes); // Préfixe toutes les routes API avec /api

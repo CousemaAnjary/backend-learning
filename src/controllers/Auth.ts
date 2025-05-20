@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs"
-import { eq } from "drizzle-orm"
-import { Request, Response } from "express"
 import db from "../db/drizzle"
+import { eq } from "drizzle-orm"
 import { users } from "../db/schema"
+import { Request, Response } from "express"
 import { registerSchema } from "../schema/auth.schema"
 
 
@@ -11,7 +11,7 @@ module.exports = {
     try {
       // Validation des données d'entrée (Zod)
       const validatedData = registerSchema.safeParse(req.body)
-      if (!validatedData.success) return res.status(400).json({ success: false, error: "Données invalides" }) 
+      if (!validatedData.success) return res.status(400).json({ success: false, error: validatedData.error.format() }) 
 
      // Destructuration des données validées
       const { name, email, password, image } = validatedData.data
@@ -32,7 +32,7 @@ module.exports = {
       })
 
       // Returner une réponse de succès
-      return res.status(201).json({ success: true, message: "User created successfully", user: newUser })
+      return res.status(201).json({ success: true, message: "User created successfully" })
 
     } catch (error) {
       res.status(500).json({ message: "Internal server error" })
