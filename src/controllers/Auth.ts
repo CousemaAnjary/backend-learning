@@ -1,6 +1,10 @@
+import bcrypt from "bcryptjs"
+import { eq } from "drizzle-orm"
 import { Request, Response } from "express"
-import { registerSchema } from "../schema/auth.schema"
 import db from "../db/drizzle"
+import { users } from "../db/schema"
+import { registerSchema } from "../schema/auth.schema"
+
 
 module.exports = {
   async register(req: Request, res: Response) {
@@ -13,7 +17,22 @@ module.exports = {
       const { name, email, password, image } = validatedData.data
 
       // Vérification si l'utilisateur existe déjà
-      const existingUser = await db.query.users
+      const existingUser = await db.query.users.findFirst({ where: eq(users.email, email) })
+      if (existingUser) return res.status(400).json({ success: false, message: "User already exists" })
+
+      // Hachage du mot de passe
+      const hashedPassword = await bcrypt.hash(password, 10)
+
+      // Insertion de l'utilisateur dans la base de données
+      const newUser = await db.insert(users).values({
+        name, 
+        email, 
+        password: hashedPassword, 
+        image,
+        emailVerified: false, 
+        createdAt: new Date(), 
+        updatedAt: new Date() 
+      })
 
     } catch (error) {
       res.status(500).json({ message: "Internal server error" })
