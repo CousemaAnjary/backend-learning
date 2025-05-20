@@ -29,9 +29,6 @@ module.exports = {
         email, 
         password: hashedPassword, 
         image,
-        emailVerified: false, 
-        createdAt: new Date(), 
-        updatedAt: new Date() 
       })
 
     } catch (error) {
