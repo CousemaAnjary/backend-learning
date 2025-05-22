@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs"
-import { eq } from "drizzle-orm"
-import { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 import db from "../db/drizzle"
+import { eq } from "drizzle-orm"
 import { users } from "../db/schema"
+import { Request, Response } from "express"
 import { loginSchema, registerSchema } from "../schema/auth.schema"
 
 const JWT_SECRET = process.env.JWT_SECRET as string 
