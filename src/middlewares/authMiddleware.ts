@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 
 const JWT_SECRET = process.env.JWT_SECRET || "vraiment-secret"
 
-// ✅ on déclare explicitement que c'est un middleware Express (retourne `void`)
+
 const authMiddleware: RequestHandler = (req, res, next) => {
   const authHeader = req.headers.authorization
 

@@ -15,11 +15,7 @@ module.exports = {
 
       // Destructuration des données validées
       const { title, author, description, coverImage, categoryId } = validatedData.data;
-      const userId = req.user.id;
-     
-
-      // Retourner une réponse de succès
-      return res.status(201).json({ success: true, message: "Book created successfully", book: newBook });
+    
 
       
     } catch (error) {
