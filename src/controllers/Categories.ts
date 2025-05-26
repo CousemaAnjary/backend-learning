@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import db from "../db/drizzle";
 import { categories } from "../db/schema/categories";
+import { categorySchema } from "../schema/categories.schema";
 
 
 module.exports = {
@@ -13,11 +14,11 @@ module.exports = {
   async createCategory(req: Request, res: Response) {
     try {
       // Validation des données d'entrée (Zod)
-      const validatedData = req.body; // Assuming you have a Zod schema to validate this
-      if (!validatedData) return res.status(400).json({ success: false, message: "Invalid data" });
+      const validatedData = categorySchema.safeParse(req.body);
+      if (!validatedData.success) return res.status(400).json({ success: false, error: validatedData.error.format() });
 
       // Destructuration des données validées
-      const { name } = validatedData
+      const { name } = validatedData.data
 
       // Insertion de la catégorie dans la base de données
       const newCategory = await db.insert(categories).values({
