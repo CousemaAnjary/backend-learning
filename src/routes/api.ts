@@ -12,7 +12,8 @@ const Categories = require("../controllers/Categories")
 router.post("/register", Auth.register)
 router.post("/login", Auth.login)
 
-// Route pour catégories
-router.post("/category", Categories.createCategory)
+
+// ==== 🏷️ Catégories (protégées par middleware) ====
+router.post("/category", authMiddleware, Categories.createCategory);
 
 module.exports = router

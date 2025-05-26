@@ -1,29 +1,27 @@
-import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import { RequestHandler } from "express"
+import jwt from "jsonwebtoken"
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_SECRET || "vraiment-secret"
 
-const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  
-  const authHeader = req.headers.authorization;
+// ✅ on déclare explicitement que c'est un middleware Express (retourne `void`)
+const authMiddleware: RequestHandler = (req, res, next) => {
+  const authHeader = req.headers.authorization
 
-  // Vérifie que le header existe et commence par "Bearer"
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Non autorisé : token manquant" });
+    res.status(401).json({ message: "Non autorisé : token manquant" })
+    return
   }
 
-  const token = authHeader.split(" ")[1]; // Récupère juste le token
+  const token = authHeader.split(" ")[1]
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string; role?: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: string , email: string , role?: string }
+    req.user = decoded
+    next() 
 
-    //  Injecte l'utilisateur dans la requête
-    req.user = decoded;
-
-    next(); // tout est bon, on continue
   } catch (err) {
-    return res.status(401).json({ message: "Token invalide ou expiré" });
+    res.status(401).json({ message: "Token invalide" })
   }
-};
+}
 
-export default authMiddleware;
+export default authMiddleware
