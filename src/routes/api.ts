@@ -1,4 +1,5 @@
 import express from "express"
+import authMiddleware from "../middlewares/authMiddleware"
 
 const router = express.Router()
 
@@ -14,6 +15,6 @@ router.post("/login", Auth.login)
 
 
 // ==== 🏷️ Catégories (protégées par middleware) ====
-router.post("/category",  Categories.createCategory);
+router.post("/category", authMiddleware, Categories.createCategory);
 
 module.exports = router
