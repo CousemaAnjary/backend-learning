@@ -64,6 +64,8 @@ module.exports = {
       // Retourner une réponse de succès avec le token
       return res.status(200).json({success: true, message: "Login successful", token })
 
+      
+
 
 
     } catch (error) {
